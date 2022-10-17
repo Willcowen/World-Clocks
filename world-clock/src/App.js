@@ -21,17 +21,19 @@ function App() {
   React.useEffect(() => {
     handleLoadData()
   }, []);
+  
+  const baseURL = 'http://worldtimeapi.org/api/timezone/' 
 
-  const handleLoadData = () => {
+  const handleLoadData = async () => {
+    let dataArray = []
     for (let i = 0; i < 3; i++) {
-      fetch('http://worldtimeapi.org/api/timezone/' + timeZones[i])
+    await fetch(baseURL + timeZones[i])
       .then((response) => response.json())
       .then((data) => {
-        let timeDataCopy = [...timeData, data]
-        setTimeData(timeDataCopy)
+        dataArray.push(data)
       })
+      setTimeData(dataArray)
     }
-
   }
 
   console.log('timeData:', timeData)
