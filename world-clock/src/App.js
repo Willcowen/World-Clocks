@@ -3,10 +3,7 @@ import React from 'react'
 import Clock from './components/Clock.jsx'
 
 function App() {
-
-  React.useEffect(() => {
-    console.log('page loaded')
-  }, []);
+  
 
   const initialTimeData = {
     longHand: "",
@@ -17,6 +14,27 @@ function App() {
   }
 
   const [londonTimeData, setLondonTimeData] = React.useState(initialTimeData)
+  const [timeData, setTimeData] = React.useState([])
+
+  let timeZones = ["Europe/London", "America/New_York", "Asia/Tokyo"]
+  
+  React.useEffect(() => {
+    handleLoadData()
+  }, []);
+
+  const handleLoadData = () => {
+    for (let i = 0; i < 3; i++) {
+      fetch('http://worldtimeapi.org/api/timezone/' + timeZones[i])
+      .then((response) => response.json())
+      .then((data) => {
+        let timeDataCopy = [...timeData, data]
+        setTimeData(timeDataCopy)
+      })
+    }
+
+  }
+
+  console.log('timeData:', timeData)
   return (
     <div className="App">
       <Clock timeData={londonTimeData} />
